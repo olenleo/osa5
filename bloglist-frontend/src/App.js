@@ -10,12 +10,12 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    const loggedUserJSON = window.localStorage.getItem('loggedInUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      blogService.setToken(user.token)
     }
   }, [])
 
@@ -25,11 +25,10 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
-      setUser(user)
-      blogService.setToken(user.token)
       window.localStorage.setItem(
-        'loggedNoteappUser', JSON.stringify(user)
-      ) 
+        'loggedInUser', JSON.stringify(user)
+      )
+     
       setUsername('')
       setPassword('')
     } catch (exception) {
