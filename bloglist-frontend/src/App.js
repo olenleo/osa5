@@ -1,86 +1,101 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Button from './components/Button'
 import blogService from './services/blogs'
 import loginService from './services/login'
-
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(() => {
+    return localStorage.getItem('loggedInUser') || null;
+  });
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem('token') || null;
+  });
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   
+
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedInUser')
+    const loggedUserJSON = localStorage.getItem('loggedInUser')
+    const loggedTokenJSON = localStorage.getItem('token')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      const readToken = JSON.parse(loggedTokenJSON)
+      const readName = JSON.parse(loggedUserJSON)
+      setUser(readName)
+      setToken(readToken)
     }
   }, [])
-
+  
+  useEffect(() => {
+    blogService.getAll().then(blogs =>
+      setBlogs( blogs )
+    )  
+  }, [])
+ 
   const handleLogin = async (event) => {
     event.preventDefault()
+   
+    console.log('Log in!')
     try {
-      const user = await loginService.login({
+      const loggedUser = await loginService.login({
         username, password,
       })
       window.localStorage.setItem(
-        'loggedInUser', JSON.stringify(user)
+        'loggedInUser', JSON.stringify(loggedUser.username)
+      )
+      window.localStorage.setItem(
+        'token', JSON.stringify(loggedUser.token)
       )
      
-      setUsername('')
-      setPassword('')
     } catch (exception) {
       setErrorMessage('wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
     }
+    setUsername('')
+    setPassword('')
+    window.location.reload();
   }
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
-  }, [])
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-          username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-      </div>
-      <div>
-          password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-      </div>
-      <button type="submit">login</button>
-    </form>      
-  )
+
+  const logout = () => {
+    console.log('LOGOUT')
+    localStorage.removeItem('loggedInUser')
+    localStorage.removeItem('token')
+    setUser(null);
+    setToken(null);
+    
+  }
+
+  const loggedIn = () => {
+     
+    return (
+      <LoginForm  handleLogin = {handleLogin}
+      username = {username}
+      password = { password}
+      setUsername = {setUsername}
+      setPassword = {setPassword} 
+      />
+    )
+  }
+
   return (
     <div>
-      
       {user === null ?
-          loginForm() :
+         loggedIn()
+         :
           <div>
-            <p>{user.name} logged in</p>
-             <h2>blogs</h2>
-              {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} />
-              )}
+            <p>{user} logged in <Button handleClick={() => {
+              logout()
+            }} text = 'logout'></Button></p>
+            {blogs.map(blog =>
+             <Blog key={blog.id} blog={blog} />
+            )}
           </div>
       }
-     
-    
     </div>
   )
 }
