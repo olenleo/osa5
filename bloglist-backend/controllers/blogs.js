@@ -13,6 +13,8 @@ router.get('/', async (request, response) => {
 })
 
 router.post('/', async (request, response) => {
+  console.log('Got a post!')
+  console.log(request.body)
   if (!request.user) {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
