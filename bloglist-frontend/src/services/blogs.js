@@ -13,6 +13,7 @@ const getAll = () => {
 
 
 const create = async newObject => {
+  console.log('Create!')
   const config = {
     headers: { Authorization: token },
   }

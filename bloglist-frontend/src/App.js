@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Button from './components/Button'
+import BlogList from './components/BlogList'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import userService from './services/user';
@@ -12,9 +13,6 @@ const App = () => {
   const [username, setUsername] = useState('') 
   const [user, setUser] = useState(() => {
     return localStorage.getItem('loggedInUser') || null;
-  });
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem('token') || null;
   });
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
@@ -29,7 +27,6 @@ const App = () => {
       const readToken = JSON.parse(loggedTokenJSON)
       const readName = JSON.parse(loggedUserJSON)
       setUser(readName)
-      setToken(readToken)
       blogService.setToken(readToken)
     }
   }, [])
@@ -63,44 +60,20 @@ const App = () => {
     setPassword('')
     window.location.reload();
   }
-
   
-   const submitBlog = async ( event ) => {
-    try {
-      const blogObject = {
-        title : blogTitle,
-        url : blogURL,
-        author : author,
-        user: user.id
-      }
-        
-      blogService.create(blogObject)
-      .then(response => {
-        setBlogs([...blogs, blogObject])
-      })
-           
-      
-    } catch (exception) {
-      setErrorMessage('Blog upload error')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    }
   
-  }
-
   const logout = () => {
     
     localStorage.removeItem('loggedInUser')
     localStorage.removeItem('token')
     setUser(null);
-    setToken(null);
     
   }
- 
-  const getUser = async() => {
-    const res = await userService.getUser(user);
-    console.log('Got ', res)
+
+  const submitBlog =  async (blogObject) => {
+    console.log('TICK!')
+    const newBlog = await blogService.create(blogObject)
+    setBlogs(blogs.concat(newBlog))
   }
   const loginView = () => {
     return (
@@ -120,18 +93,12 @@ const App = () => {
     return (  
     <div>
       <p>{user} logged in <Button handleClick={() => {
-        logout()
+        logout() 
       }} text = 'logout'></Button></p>
-      {blogs.map(blog =>
-       <Blog key={blog.id} blog={blog} />
-      )}
-     
+      {console.log('Bloglist below recieves', blogs)}
+      <BlogList blogs = {blogs}/>
       <h2>Add new blog:</h2>
-     <BlogForm 
-      handleAddNewBlog={submitBlog} 
-      setTitle = {setBlogTitle} 
-      setAuthor = {setAuthor} 
-      setURL = {setBlogURL} />
+     <BlogForm addBlog= {submitBlog}/>
     </div>
     )
   }
