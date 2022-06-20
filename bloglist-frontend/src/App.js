@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef} from 'react'
 import Button from './components/Button'
 import BlogList from './components/BlogList'
 import Notification from './components/Notification'
@@ -7,6 +7,7 @@ import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import './index.css'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -17,6 +18,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [notification, setNotification] = useState('')
   const [notificationType, setNotificationType] = useState('')
+  const blogFormRef = useRef()
 
 
   useEffect(() => {
@@ -72,6 +74,7 @@ const App = () => {
   }
 
   const submitBlog =  async (blogObject) => {
+    blogFormRef.current.toggleVisibility()
     try {
       const newBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(newBlog))
@@ -112,7 +115,9 @@ const App = () => {
       }} text = 'logout'></Button></p>
       <BlogList blogs = {blogs}/>
       <h2>Add new blog:</h2>
+      <Togglable buttonLabel = "New blog" ref = {blogFormRef}>
       <BlogForm addBlog= {submitBlog}/>
+      </Togglable>
     </div>
     )
   }
