@@ -1,8 +1,26 @@
-import React from 'react'
+import React, {useState}from 'react'
+import loginService from '../services/login'
+const LoginForm = ( {handleLogin} ) => {
 
-const LoginForm = ( {handleLogin, username, 
-    password, setUsername, setPassword} ) => (
-    <form onSubmit={handleLogin}>
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  
+  const submitLogin = async( event ) => {
+    event.preventDefault()
+    try {
+      const loggedUser = {
+        username : username,
+        password : password
+      }
+      handleLogin(loggedUser)
+    } catch (e) {
+
+    } 
+  }
+  
+
+  return (
+    <form onSubmit={submitLogin}>
       <div>
           username
           <input
@@ -20,8 +38,8 @@ const LoginForm = ( {handleLogin, username,
             name="Password"
             onChange={({ target }) => setPassword(target.value)}
           />
-      </div>
+      </div>, 
       <button type="submit">login</button>
     </form>      
-  )
+    )}
   export default LoginForm

@@ -8,7 +8,6 @@ const BlogForm = ( {addBlog} ) => {
 
     const submitBlog = async ( event ) => {
       event.preventDefault()
-      console.log('submitBlog!')
       try {
         const blogObject = {
           title : title,
