@@ -75,7 +75,7 @@ const App = () => {
     try {
       const newBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(newBlog))
-      setNotification(`Add ${newBlog.title}`)
+      setNotification(`Blog ${newBlog.title} added successfully`)
       setNotificationType('success')
       setTimeout(() => {
         setNotification(null)
