@@ -1,5 +1,5 @@
-import React from "react";
-import { useState } from "react";
+import React ,  { useState }from "react";
+
 const BlogForm = ( {addBlog} ) => {
 
     const [title, setTitle] = useState('')
@@ -19,7 +19,7 @@ const BlogForm = ( {addBlog} ) => {
         setUrl('')
         setAuthor('')
       } catch (exception) {
-
+        console.log('Blog submission error', exception)
       }
     
     }

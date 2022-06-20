@@ -53,7 +53,7 @@ const App = () => {
      
     } catch (exception) {
       setNotification('wrong credentials')
-      console.log(exception)
+      //console.log(exception)
       setNotificationType('error')
       setTimeout(() => {
         setNotification(null)
