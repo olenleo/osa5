@@ -48,8 +48,9 @@ router.delete('/:id', async (request, response) => {
 })
 
 router.put('/:id', async (request, response) => {
+  console.log('Got a PUT')
   const blog = request.body
-
+  console.log(blog)
   const updatedBlog = await Blog
     .findByIdAndUpdate(
       request.params.id, 

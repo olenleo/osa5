@@ -13,7 +13,6 @@ const getAll = () => {
 
 
 const create = async newObject => {
-  console.log('Create!')
   const config = {
     headers: { Authorization: token },
   }
@@ -22,4 +21,18 @@ const create = async newObject => {
   return response.data
 }
 
-export default { getAll, create ,setToken}
+const like =  (id, newObject) => {
+  
+  const request = axios.put(`${baseUrl}/${id}`, newObject)
+  return request.then(response => response.data)
+}
+const removeItem = (id) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  const response =  axios.delete(`${baseUrl}/${id}`, config)
+  console.log('Delete done: ', response.data)
+  return response.data
+}
+export default { getAll, create ,setToken, like, removeItem}

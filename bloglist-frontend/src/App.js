@@ -53,7 +53,6 @@ const App = () => {
      
     } catch (exception) {
       setNotification('wrong credentials')
-      //console.log(exception)
       setNotificationType('error')
       setTimeout(() => {
         setNotification(null)
@@ -93,6 +92,81 @@ const App = () => {
       }, 5000)
     }
   }
+/*
+  const deletePerson = (id) => {
+    const personToDelete = persons.find(p => p.id === id)
+    console.log('Person to delete', personToDelete, 'id', personToDelete.id)
+    if (window.confirm(`Delete contacts for ${personToDelete.name}?`)) {
+    personService.deletePerson(id)
+    .then(response=> {
+      setPersons(persons.filter(p => id !== p.id))
+      setNotificationMessage(`${personToDelete.name} deleted!`)
+      setNotificationType('success')
+      showNotification()
+    })
+    .catch(error => {
+      setNotificationMessage(`${personToDelete.name} already removed from server!`)
+      setNotificationType('error')
+    })
+    showNotification()
+  }
+  */
+
+  const handleDelete = async (id) => {
+    const blog = blogs.find(b => b.id === id)
+    if (window.confirm(`Remove '${blog.title}' by ${blog.author}?`)) {
+      try {
+      blogService.removeItem(blog.id)
+      setBlogs(blogs.filter(b => id !== b.id))
+      
+      setNotification(`${blog.title} deleted!`)
+      setNotificationType('success')
+      setTimeout(() => {
+        setNotification(null)
+        setNotificationType(null)
+      }, 5000)
+    } catch (e) {
+      console.log(e)
+      setNotification(`${blog.title} already removed from server?`)
+      setNotificationType('error')
+
+    }
+    setTimeout(() => {
+      setNotification(null)
+      setNotificationType(null)
+    }, 5000)
+    }
+  }
+
+  const handleLike = async (id) => {
+    const blog = blogs.find(b => b.id === id)
+    const updatedBlog = {
+      user : blog.user.id,
+      likes : blog.likes + 1,
+      author: blog.author,
+      title  :blog.title,
+      url : blog.url
+    }
+    try {
+      const ret = await blogService.like(id,updatedBlog)
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : ret))
+      setNotificationType("success")
+      setNotification(`Liked ${blog.title}`)
+      setTimeout(() => {
+        setNotification(null)
+        setNotificationType(null)
+      }, 5000)
+  } catch (e) {
+    setBlogs(blogs.filter(n => n.id !== id))
+    setNotificationType("error")
+    setNotification(`${blog.title} is probably missing from the server.`)
+    setTimeout(() => {
+      setNotification(null)
+      setNotificationType(null)
+    }, 5000)} 
+    
+
+  }
   
   const loginView = () => {
     return (
@@ -113,11 +187,12 @@ const App = () => {
       <p>{user} logged in <Button handleClick={() => {
         logout() 
       }} text = 'logout'></Button></p>
-      <BlogList blogs = {blogs}/>
       <h2>Add new blog:</h2>
       <Togglable buttonLabel = "New blog" ref = {blogFormRef}>
       <BlogForm addBlog= {submitBlog}/>
       </Togglable>
+      <h2>Blog listing</h2>
+      <BlogList blogs = {blogs} handleLike ={handleLike} handleDelete={handleDelete}/>
     </div>
     )
   }
@@ -128,5 +203,6 @@ const App = () => {
     </div>
   )
 }
+
 
 export default App
