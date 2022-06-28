@@ -5,5 +5,5 @@ const getUser = async (username) => {
     const response = await axios.get(`${baseUrl}/${username}`);
     return response.data;
 };
-
-export default { getUser };
+const exportedObject = { getUser }
+export default exportedObject

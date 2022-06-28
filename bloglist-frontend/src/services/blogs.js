@@ -6,11 +6,11 @@ let token = null;
 const setToken = newToken => {
   token = `bearer ${ newToken }`
 }
+
 const getAll = () => {
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
 }
-
 
 const create = async newObject => {
   const config = {
@@ -22,7 +22,6 @@ const create = async newObject => {
 }
 
 const like =  (id, newObject) => {
-  
   const request = axios.put(`${baseUrl}/${id}`, newObject)
   return request.then(response => response.data)
 }
@@ -35,4 +34,5 @@ const removeItem = (id) => {
   console.log('Delete done: ', response.data)
   return response.data
 }
-export default { getAll, create ,setToken, like, removeItem}
+const exportedObject =  { getAll, create ,setToken, like, removeItem}
+export default exportedObject
