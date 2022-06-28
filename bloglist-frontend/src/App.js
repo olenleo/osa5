@@ -92,25 +92,6 @@ const App = () => {
       }, 5000)
     }
   }
-/*
-  const deletePerson = (id) => {
-    const personToDelete = persons.find(p => p.id === id)
-    console.log('Person to delete', personToDelete, 'id', personToDelete.id)
-    if (window.confirm(`Delete contacts for ${personToDelete.name}?`)) {
-    personService.deletePerson(id)
-    .then(response=> {
-      setPersons(persons.filter(p => id !== p.id))
-      setNotificationMessage(`${personToDelete.name} deleted!`)
-      setNotificationType('success')
-      showNotification()
-    })
-    .catch(error => {
-      setNotificationMessage(`${personToDelete.name} already removed from server!`)
-      setNotificationType('error')
-    })
-    showNotification()
-  }
-  */
 
   const handleDelete = async (id) => {
     const blog = blogs.find(b => b.id === id)
