@@ -23,7 +23,7 @@ test('renders title', () => {
 
 })
 
-test('clicking \'like\' calls eventhandler', async () => {
+test('clicking \'like\' twice calls eventhandler twice', async () => {
   const mockHandler = jest.fn()
   const user = userEvent.setup()
   render(<Blog blog ={blog} handleLike = {mockHandler}/>)
@@ -31,6 +31,7 @@ test('clicking \'like\' calls eventhandler', async () => {
   await user.click(button)  
   const likeButton = screen.getByText('Like')
   await user.click(likeButton)
-  expect(mockHandler.mock.calls).toHaveLength(1)
+  await user.click(likeButton)
+  expect(mockHandler.mock.calls).toHaveLength(2)
 
 })
