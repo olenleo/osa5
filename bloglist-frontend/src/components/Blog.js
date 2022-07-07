@@ -24,7 +24,8 @@ const Blog = ({blog, handleLike, handleDelete}) => {
       }} text = {buttonLabel}></Button></p>)
     } else {
       return (
-      <div>
+      <div id='blog-render'>
+        
         <p><b>{blog.title}</b> <Button handleClick={() => {toggleVisible()}} text = {buttonLabel}></Button></p>
         <p>Author: {blog.author}</p>
         <p>Likes : {blog.likes}  <Button handleClick={() => {handleLike(blog.id)}} text = 'Like'/> </p>
