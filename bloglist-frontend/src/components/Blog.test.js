@@ -13,7 +13,6 @@ const blog = {
 test('renders title', () => {
 
   render(<Blog blog={blog} />)
-
   const element = screen.getByText('Initial test for blog rendering')
   const likes = screen.queryByText('Likes')
   const author = screen.queryByText('Author')
@@ -23,7 +22,6 @@ test('renders title', () => {
   expect(url).toBeNull()
 
 })
-
 
 test('clicking \'like\' calls eventhandler', async () => {
   const mockHandler = jest.fn()
