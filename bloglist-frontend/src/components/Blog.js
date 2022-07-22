@@ -24,11 +24,11 @@ const Blog = ({blog, handleLike, handleDelete}) => {
       }} text = {buttonLabel}></Button></p>)
     } else {
       return (
-      <div id='blog-render'>
+      <div>
         
         <p><b>{blog.title}</b> <Button handleClick={() => {toggleVisible()}} text = {buttonLabel}></Button></p>
         <p>Author: {blog.author}</p>
-        <p>Likes : {blog.likes}  <Button handleClick={() => {handleLike(blog.id)}} text = 'Like'/> </p>
+        <p>Likes: {blog.likes}  <Button handleClick={() => {handleLike(blog.id)}} text = 'Like'/> </p>
         <p>Link: <a href = {blog.url}>{blog.url}</a> </p>
         <p><Button handleClick={() => {handleDelete(blog.id)}} text= 'Remove'/></p>
       </div>

@@ -10,6 +10,7 @@ const blog = {
   likes: 3,
   url: 'https://placeholder.fi'
 }
+const user = userEvent.setup()
 test('renders title', () => {
 
   render(<Blog blog={blog} />)
@@ -20,12 +21,11 @@ test('renders title', () => {
   expect(likes).toBeNull()
   expect(author).toBeNull()
   expect(url).toBeNull()
-
 })
 
 test('clicking \'like\' twice calls eventhandler twice', async () => {
   const mockHandler = jest.fn()
-  const user = userEvent.setup()
+  
   render(<Blog blog ={blog} handleLike = {mockHandler}/>)
   const button = screen.getByText('show')
   await user.click(button)  
@@ -33,5 +33,12 @@ test('clicking \'like\' twice calls eventhandler twice', async () => {
   await user.click(likeButton)
   await user.click(likeButton)
   expect(mockHandler.mock.calls).toHaveLength(2)
+})
 
+test('revealed toggleable content includes author, url and likes', async () => {
+  render(<Blog blog={blog} />)
+  const button = screen.getByText('show')
+  await user.click(button)
+  const likes = screen.getByText('Likes: 3')
+  const url = screen.getByText('https://placeholder.fi')
 })
