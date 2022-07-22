@@ -41,4 +41,5 @@ test('revealed toggleable content includes author, url and likes', async () => {
   await user.click(button)
   const likes = screen.getByText('Likes: 3')
   const url = screen.getByText('https://placeholder.fi')
+  const author = screen.getByText('Author: Leo Niemi')
 })
