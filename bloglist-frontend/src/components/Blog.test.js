@@ -3,6 +3,7 @@ import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
+import BlogForm from './BlogForm'
 
 const blog = {
   title: 'Initial test for blog rendering',
@@ -42,4 +43,21 @@ test('revealed toggleable content includes author, url and likes', async () => {
   const likes = screen.getByText('Likes: 3')
   const url = screen.getByText('https://placeholder.fi')
   const author = screen.getByText('Author: Leo Niemi')
+})
+
+test('adding new blog calls eventhandler with correct props', async () => {
+  const addBlog = jest.fn()
+  render(<BlogForm addBlog={addBlog}/>)
+  const inputForm = screen.getAllByRole('textbox')
+  const sendButton = screen.getByText('Add blog!')
+  await user.type(inputForm[0], 'testing blog title')
+  await user.type(inputForm[1], 'userEvent')
+  await user.type(inputForm[2], 'this.site.does.not.exist')
+  await user.click(sendButton)
+  expect(addBlog.mock.calls).toHaveLength(1)
+  expect(addBlog.mock.calls[0][0].title).toBe('testing blog title')
+  expect(addBlog.mock.calls[0][0].author).toBe('userEvent')
+  expect(addBlog.mock.calls[0][0].url).toBe('this.site.does.not.exist')
+  
+
 })
