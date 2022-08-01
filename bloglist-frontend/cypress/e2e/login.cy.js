@@ -7,18 +7,18 @@ describe('Blog app login view', function() {
     cy.request('POST', 'http://localhost:3003/api/users/', user) 
     cy.visit('http://localhost:3000')
   })
-  it('Login form is shown', function() {
+  xit('Login form is shown', function() {
     cy.contains("username")
     cy.contains("password")
     cy.contains("login")
     })
-  it('Login works when given correct credentials', function() {
+  xit('Login works when given correct credentials', function() {
     cy.get("#username").type("Jasso Kissa 85")
     cy.get("#password").type("Sekret")
     cy.get("#login-button").click()
     cy.contains("\"Jasso Kissa 85\" logged in")
   })
-  it('Login with faulty credentials displays error', function() {
+  xit('Login with faulty credentials displays error', function() {
     cy.get("#username").type("Nonexistent")
     cy.get("#password").type("null")
     cy.get("#login-button").click()
@@ -41,14 +41,20 @@ describe('When logged in:', function() {
     cy.get('#urlField').type('url')
     cy.get('#writerField').type('Writer')
     cy.get('#submit-blog').click()
-    cy.get("#notification").contains("Title").and('have.css', 'color','rgb(0, 0, 0)')
+    cy.get("#notification").contains("Blog Title").and('have.css', 'color','rgb(0, 0, 0)')
   })
   it('A blog can be liked', function() {
-    cy.contains('show').parent().find('button').click()
+    cy.contains('Blog Title').parent().find('button').click()
     cy.contains('Likes: 0')
     cy.contains('Like').parent().find('button').click()
-    cy.contains('Likes: 1')
     cy.get("#notification").contains("Liked Blog Title").and('have.css', 'color','rgb(0, 0, 0)')
+    cy.contains('Likes: 1')
+
+  })
+  it('A blog can be deleted', function() {
+    cy.contains('Blog Title').parent().find('button').click()
+    cy.contains('Remove').click()
+    cy.get("#notification").contains("Blog Title deleted").and('have.css', 'color','rgb(0, 0, 0)')
 
   })
 

@@ -28,7 +28,6 @@ Cypress.Commands.add('login', ({ username, name, password }) => {
     cy.request('POST', 'http://localhost:3003/api/login', {
       username, name, password
     }).then(({ body }) => {
-        console.log('Cypress command,', body.username)
         localStorage.setItem('loggedInUser', JSON.stringify(body.username))
         localStorage.setItem('token', JSON.stringify(body.token))
       cy.visit('http://localhost:3000')
