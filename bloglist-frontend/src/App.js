@@ -169,7 +169,7 @@ const App = () => {
         logout() 
       }} text = 'logout'></Button></p>
       <h2>Add new blog:</h2>
-      <Togglable buttonLabel = "New blog" ref = {blogFormRef}>
+      <Togglable id = "add-new" buttonLabel = "New blog" ref = {blogFormRef}>
       <BlogForm addBlog= {submitBlog}/>
       </Togglable>
       <h2>Blog listing</h2>

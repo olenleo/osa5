@@ -1,13 +1,12 @@
+const { func } = require("prop-types")
 
 describe('Blog app login view', function() {
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
     const user = { username: 'Jasso Kissa 85', name: 'Leo', password: 'Sekret' }
-    
     cy.request('POST', 'http://localhost:3003/api/users/', user) 
     cy.visit('http://localhost:3000')
   })
-
   it('Login form is shown', function() {
     cy.contains("username")
     cy.contains("password")
@@ -19,11 +18,27 @@ describe('Blog app login view', function() {
     cy.get("#login-button").click()
     cy.contains("\"Jasso Kissa 85\" logged in")
   })
-  it('Login with faulty credentials', function() {
+  it('Login with faulty credentials displays error', function() {
     cy.get("#username").type("Nonexistent")
     cy.get("#password").type("null")
     cy.get("#login-button").click()
-    cy.get("#notification").contains("wrong credentials")
-    .and('have.css', 'color','rgb(255, 0, 0)')
+    cy.get("#notification").contains("wrong credentials").and('have.css', 'color','rgb(255, 0, 0)')
   })
+
+})
+
+describe('When logged in:', function() {
+  beforeEach(function() {
+    cy.login({username: 'Jasso Kissa 85', name: 'Leo', password: 'Sekret'})
+    cy.request('POST', 'http://localhost:3003/api/testing/resetBlogs')
+  })
+  it('A blog can be created', function() {
+    cy.get('#togglable-button').click()
+    cy.get('#titleField').type('Title')
+    cy.get('#urlField').type('url')
+    cy.get('#writerField').type('Writer')
+    cy.get('#submit-blog').click()
+    cy.get("#notification").contains("Title").and('have.css', 'color','rgb(0, 0, 0)')
+  })
+
 })

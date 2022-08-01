@@ -30,6 +30,7 @@ return (
       <div>
           Title:
           <input
+            id = "titleField"
             type="text"
             value={title}
             name="Title"
@@ -39,6 +40,7 @@ return (
       <div>
           Writer:
           <input
+            id = "writerField"
             type="text"
             value={author}
             name="Password"
@@ -48,13 +50,14 @@ return (
       <div>
           URL:
           <input
+            id = "urlField"
             type="text"
             value={url}
             name="Blog URL"
             onChange={({ target }) => setUrl(target.value)}
           />
       </div>
-      <button type="submit">Add blog!</button>
+      <button id="submit-blog" type="submit">Add blog!</button>
     </form>      
 )}
   export default BlogForm
