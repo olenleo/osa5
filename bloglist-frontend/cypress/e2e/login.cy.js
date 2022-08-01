@@ -30,15 +30,26 @@ describe('Blog app login view', function() {
 describe('When logged in:', function() {
   beforeEach(function() {
     cy.login({username: 'Jasso Kissa 85', name: 'Leo', password: 'Sekret'})
+  })
+  after(function() {
     cy.request('POST', 'http://localhost:3003/api/testing/resetBlogs')
+
   })
   it('A blog can be created', function() {
     cy.get('#togglable-button').click()
-    cy.get('#titleField').type('Title')
+    cy.get('#titleField').type('Blog Title')
     cy.get('#urlField').type('url')
     cy.get('#writerField').type('Writer')
     cy.get('#submit-blog').click()
     cy.get("#notification").contains("Title").and('have.css', 'color','rgb(0, 0, 0)')
+  })
+  it('A blog can be liked', function() {
+    cy.contains('show').parent().find('button').click()
+    cy.contains('Likes: 0')
+    cy.contains('Like').parent().find('button').click()
+    cy.contains('Likes: 1')
+    cy.get("#notification").contains("Liked Blog Title").and('have.css', 'color','rgb(0, 0, 0)')
+
   })
 
 })
