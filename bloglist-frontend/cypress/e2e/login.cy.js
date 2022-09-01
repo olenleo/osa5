@@ -26,36 +26,60 @@ describe('Blog app login view', function() {
   })
 
 })
-
+function addBlog( title ) {
+  cy.get('#togglable-button').click()
+  cy.get('#titleField').type(title)
+  cy.get('#urlField').type('url')
+  cy.get('#writerField').type('writer')
+  cy.get('#submit-blog').click()
+}
 describe('When logged in:', function() {
   beforeEach(function() {
+    const user = { username: 'Jasso Kissa 85', name: 'Leo', password: 'Sekret' }
+    const anotherUser = { username: 'Test-user', name: 'null', password: 'null' }
+    cy.request('POST', 'http://localhost:3003/api/testing/reset')
+    cy.request('POST', 'http://localhost:3003/api/users/', user)
+    cy.request('POST', 'http://localhost:3003/api/users/', anotherUser) 
     cy.login({username: 'Jasso Kissa 85', name: 'Leo', password: 'Sekret'})
+    addBlog('first blog')
+    addBlog('second blog')
   })
   after(function() {
     cy.request('POST', 'http://localhost:3003/api/testing/resetBlogs')
-
   })
   it('A blog can be created', function() {
     cy.get('#togglable-button').click()
-    cy.get('#titleField').type('Blog Title')
-    cy.get('#urlField').type('url')
-    cy.get('#writerField').type('Writer')
+    cy.get('#titleField').type('Unique-title')
+    cy.get('#urlField').type('url field')
+    cy.get('#writerField').type('writer field')
     cy.get('#submit-blog').click()
-    cy.get("#notification").contains("Blog Title").and('have.css', 'color','rgb(0, 0, 0)')
+    cy.get("#notification").contains('Unique-title').and('have.css', 'color','rgb(0, 0, 0)')
   })
+
   it('A blog can be liked', function() {
-    cy.contains('Blog Title').parent().find('button').click()
+    cy.contains('first blog').parent().find('button').click()
     cy.contains('Likes: 0')
     cy.contains('Like').parent().find('button').click()
-    cy.get("#notification").contains("Liked Blog Title").and('have.css', 'color','rgb(0, 0, 0)')
+    cy.get("#notification").contains("Liked first blog").and('have.css', 'color','rgb(0, 0, 0)')
     cy.contains('Likes: 1')
 
   })
-  it('A blog can be deleted', function() {
-    cy.contains('Blog Title').parent().find('button').click()
+ 
+  it.only('Blogs can not be deleted by other users', function() {
+    cy.contains('logout').click()
+    cy.login({username: 'Test-user', name: 'null', password: 'null'})
+    cy.contains('first blog').parent().find('button').click()
     cy.contains('Remove').click()
-    cy.get("#notification").contains("Blog Title deleted").and('have.css', 'color','rgb(0, 0, 0)')
+    cy.wait(500)
+    cy.contains('first blog')
 
+  })
+
+  it('A blog can be deleted', function() {
+    cy.wait(500)
+    cy.contains('first blog').parent().find('button').click()
+    cy.contains('Remove').click()
+    cy.get("#notification").contains("first blog deleted").and('have.css', 'color','rgb(0, 0, 0)') 
   })
 
 })

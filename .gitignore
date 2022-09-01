@@ -1,1 +1,2 @@
-./blocklist-backend/.env
+./bloglist-backend/.env
+./bloglist-frontend/.env

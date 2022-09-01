@@ -14,8 +14,8 @@ router.get('/', async (request, response) => {
 
 router.post('/', async (request, response) => {
   console.log('Got a post!')
-  console.log(request.body)
   if (!request.user) {
+    console.log('!request.user')
     return response.status(401).json({ error: 'token missing or invalid' })
   }
 
@@ -31,24 +31,31 @@ router.post('/', async (request, response) => {
 })
 
 router.delete('/:id', async (request, response) => {
+  const token = request.token
+  
+  console.log(token)
+
+  //console.log('Recieved delete:', request)
   const blogToDelete = await Blog.findById(request.params.id)
   if (!blogToDelete ) {
     return response.status(204).end()
-  }
-
-  if ( blogToDelete.user && blogToDelete.user.toString() !== request.user.id ) {
+  } else if (request.user.toString() !== blogToDelete.user.toString()) {
+    console.log(request.user.id.toString(), " - ", blogToDelete.user.toString(), request.user.id.toString()=== blogToDelete.user.toString())
+    console.log('No match. Returning error:')
     return response.status(401).json({
       error: 'only the creator can delete a blog'
-    })
+    }).end()
+    
+  } else {
+    console.log('Remove operation:')
+    await Blog.findByIdAndRemove(request.params.id)
+    response.status(204).end()
+    console.log('\nDelete done.')
   }
-
-  await Blog.findByIdAndRemove(request.params.id)
-
-  response.status(204).end()
 })
 
 router.put('/:id', async (request, response) => {
-  console.log('Got a PUT')
+  
   const blog = request.body
   console.log(blog)
   const updatedBlog = await Blog
