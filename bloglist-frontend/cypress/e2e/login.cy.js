@@ -82,4 +82,6 @@ describe('When logged in:', function() {
     cy.get("#notification").contains("first blog deleted").and('have.css', 'color','rgb(0, 0, 0)') 
   })
 
+
+
 })

@@ -22,7 +22,7 @@ const App = () => {
 
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedInUser')
+    const loggedUserJSON = window.localStorage.getItem('username')
     const loggedTokenJSON = window.localStorage.getItem('token')
     if (loggedUserJSON) {
       const readToken = JSON.parse(loggedTokenJSON)
@@ -99,7 +99,6 @@ const App = () => {
       try {
       blogService.removeItem(blog.id)
       setBlogs(blogs.filter(b => id !== b.id))
-      
       setNotification(`${blog.title} deleted!`)
       setNotificationType('success')
       setTimeout(() => {
@@ -169,7 +168,7 @@ const App = () => {
         logout() 
       }} text = 'logout'></Button></p>
       <h2>Add new blog:</h2>
-      <Togglable id = "add-new" buttonLabel = "New blog" ref = {blogFormRef}>
+      <Togglable buttonLabel = "New blog" ref = {blogFormRef}>
       <BlogForm addBlog= {submitBlog}/>
       </Togglable>
       <h2>Blog listing</h2>
