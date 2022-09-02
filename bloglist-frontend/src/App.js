@@ -22,12 +22,13 @@ const App = () => {
 
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('username')
+    console.log('Effect!')
+    const loggedUserJSON = window.localStorage.getItem('loggedInUser')
     const loggedTokenJSON = window.localStorage.getItem('token')
     if (loggedUserJSON) {
       const readToken = JSON.parse(loggedTokenJSON)
       const readName = JSON.parse(loggedUserJSON)
-      setUser(readName)
+      setUsername(readName)
       blogService.setToken(readToken)
     }
   }, [])
@@ -164,7 +165,9 @@ const App = () => {
   const loggedOut = () => {
     return (  
     <div>
-      <p>{user} logged in <Button handleClick={() => {
+      {console.log('user:', localStorage.loggedInUser)}
+      {console.log('username:', username)}
+      <p>{username} logged in <Button handleClick={() => {
         logout() 
       }} text = 'logout'></Button></p>
       <h2>Add new blog:</h2>

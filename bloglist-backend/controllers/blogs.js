@@ -20,6 +20,7 @@ router.post('/', async (request, response) => {
   }
 
   const user = request.user
+  console.log('Add by', user)
   const blog = new Blog({ ...request.body, user: user.id })
 
   const savedBlog = await blog.save()
@@ -31,21 +32,15 @@ router.post('/', async (request, response) => {
 })
 
 router.delete('/:id', async (request, response) => {
-  const token = request.token
-  
-  console.log(token)
-
-  //console.log('Recieved delete:', request)
   const blogToDelete = await Blog.findById(request.params.id)
+  console.log('user', request.user.toString())
+  console.log('\nblogtoDelete', blogToDelete.toString())
   if (!blogToDelete ) {
     return response.status(204).end()
-  } else if (request.user.toString() !== blogToDelete.user.toString()) {
+  } else if (request.user.id.toString() !== blogToDelete.id.toString()) {
     console.log(request.user.id.toString(), " - ", blogToDelete.user.toString(), request.user.id.toString()=== blogToDelete.user.toString())
     console.log('No match. Returning error:')
-    return response.status(401).json({
-      error: 'only the creator can delete a blog'
-    }).end()
-    
+    return response.status(401).json({error: 'only the creator can delete a blog'})
   } else {
     console.log('Remove operation:')
     await Blog.findByIdAndRemove(request.params.id)

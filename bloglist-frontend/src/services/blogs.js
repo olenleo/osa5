@@ -30,8 +30,8 @@ const removeItem = (id) => {
     headers: { Authorization: token },
   }
   console.log('axios.delete' , `${baseUrl}/${id}`, "\n", config)
-  const response =  axios.delete(`${baseUrl}/${id}`, config)
-  return response.data
+  const request = axios.delete(`${baseUrl}/${id}`, config); 
+  return request.then((response) => response.data);
 }
 const exportedObject =  { getAll, create ,setToken, like, removeItem}
 export default exportedObject
