@@ -22,7 +22,7 @@ const App = () => {
 
 
   useEffect(() => {
-    console.log('Effect!')
+
     const loggedUserJSON = window.localStorage.getItem('loggedInUser')
     const loggedTokenJSON = window.localStorage.getItem('token')
     if (loggedUserJSON) {
@@ -95,23 +95,18 @@ const App = () => {
   }
 
   const handleDelete = async (id) => {
+    
     const blog = blogs.find(b => b.id === id)
+    console.log('User ', user, ' asks to delete ' , blog)
     if (window.confirm(`Remove '${blog.title}' by ${blog.author}?`)) {
       try {
-      blogService.removeItem(blog.id)
-      setBlogs(blogs.filter(b => id !== b.id))
-      setNotification(`${blog.title} deleted!`)
-      setNotificationType('success')
-      setTimeout(() => {
-        setNotification(null)
-        setNotificationType(null)
-      }, 5000)
-    } catch (e) {
-      console.log(e)
-      setNotification(`${blog.title} already removed from server?`)
-      setNotificationType('error')
-
-    }
+        blogService.removeItem(blog.id)
+        setBlogs(blogs.filter(b => id !== b.id))
+      } catch (e) {
+        console.log(e)
+        setNotification(`${blog.title} already removed from server?`)
+        setNotificationType('error')
+      }
     setTimeout(() => {
       setNotification(null)
       setNotificationType(null)
@@ -137,16 +132,14 @@ const App = () => {
         setNotification(null)
         setNotificationType(null)
       }, 5000)
-  } catch (e) {
-    setBlogs(blogs.filter(n => n.id !== id))
-    setNotificationType("error")
-    setNotification(`${blog.title} is probably missing from the server.`)
-    setTimeout(() => {
-      setNotification(null)
-      setNotificationType(null)
-    }, 5000)} 
-    
-
+    } catch (e) {
+      setBlogs(blogs.filter(n => n.id !== id))
+      setNotificationType("error")
+      setNotification(`${blog.title} is probably missing from the server.`)
+      setTimeout(() => {
+        setNotification(null)
+        setNotificationType(null)
+      }, 5000)} 
   }
   
   const loginView = () => {
@@ -162,7 +155,7 @@ const App = () => {
 
     )
   }
-  const loggedOut = () => {
+  const loggedIn = () => {
     return (  
     <div>
       {console.log('user:', localStorage.loggedInUser)}
@@ -181,7 +174,7 @@ const App = () => {
   }
   return (
     <div>
-      {user === null ? <div>{loginView()}</div> : loggedOut()}
+      {user === null ? <div>{loginView()}</div> : loggedIn()}
       <Notification message = {notification} notificationType = {notificationType} />
     </div>
   )

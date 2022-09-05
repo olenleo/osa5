@@ -5,6 +5,7 @@ let token = null;
 
 const setToken = newToken => {
   token = `bearer ${ newToken }`
+  console.log('TOKEN set:', token )
 }
 
 const getAll = () => {
@@ -25,12 +26,14 @@ const like =  (id, newObject) => {
   const request = axios.put(`${baseUrl}/${id}`, newObject)
   return request.then(response => response.data)
 }
+
 const removeItem = (id) => {
   const config = {
     headers: { Authorization: token },
   }
-  console.log('axios.delete' , `${baseUrl}/${id}`, "\n", config)
+  
   const request = axios.delete(`${baseUrl}/${id}`, config); 
+  console.log('REQUEST:', request)
   return request.then((response) => response.data);
 }
 const exportedObject =  { getAll, create ,setToken, like, removeItem}

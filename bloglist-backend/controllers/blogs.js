@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const jwt = require('jsonwebtoken')
+const blog = require('../models/blog')
 
 const Blog = require('../models/blog')
 const User = require('../models/user')
@@ -33,20 +34,18 @@ router.post('/', async (request, response) => {
 
 router.delete('/:id', async (request, response) => {
   const blogToDelete = await Blog.findById(request.params.id)
-  console.log('user', request.user.toString())
-  console.log('\nblogtoDelete', blogToDelete.toString())
   if (!blogToDelete ) {
     return response.status(204).end()
-  } else if (request.user.id.toString() !== blogToDelete.id.toString()) {
+  } 
+  if (request.user.id.toString() !== blogToDelete.user.toString()) {
+    console.log('User !== blog owner:')
     console.log(request.user.id.toString(), " - ", blogToDelete.user.toString(), request.user.id.toString()=== blogToDelete.user.toString())
-    console.log('No match. Returning error:')
-    return response.status(401).json({error: 'only the creator can delete a blog'})
-  } else {
-    console.log('Remove operation:')
-    await Blog.findByIdAndRemove(request.params.id)
-    response.status(204).end()
-    console.log('\nDelete done.')
+    console.log('No match. Returning error.')
+    return response.status(401).json({error: 'only the creator can delete a blog'}).end()
   }
+  blogToDelete.remove()
+  response.status(204).send()
+  console.log('Delete done.')
 })
 
 router.put('/:id', async (request, response) => {
