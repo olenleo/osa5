@@ -4,14 +4,16 @@ import PropTypes from 'prop-types'
 
 const BlogList = ( {blogs, handleLike, handleDelete} ) => {
     return (
-        <div>
+        <div className="bloglist">
           {blogs.sort((blog1, blog2) => blog2.likes - blog1.likes).map(blog =>
+		  <div className="blogListingField" key={blog.id}>
             <Blog
-              key={ blog.id  }
-              blog={ blog  }
-              handleLike = {handleLike}
-              handleDelete = {handleDelete}
+              key={ blog.id }
+              blog={ blog }
+              handleLike = { handleLike }
+              handleDelete = { handleDelete }
             />
+		</div>
           )}
         </div>
       )

@@ -4,6 +4,7 @@ import Button from "./Button"
 const Blog = ({blog, handleLike, handleDelete}) => {
   const [visible, setVisible] = useState(false)
   const [buttonLabel, setButtonLabel] = useState('show')
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 5,
@@ -19,12 +20,12 @@ const Blog = ({blog, handleLike, handleDelete}) => {
 
   const displayBlog = () => {
     if (!visible)  {
-      return ( <p><b>{blog.title}</b>  <Button handleClick={() => {
-        toggleVisible() 
-      }} text = {buttonLabel}></Button></p>)
+      return ( 
+		<div>
+			<p><b>{blog.title}</b>  <Button handleClick={() => {toggleVisible()}} text = {buttonLabel}></Button></p></div>)
     } else {
       return (
-      <div>
+		<div>
         
         <p><b>{blog.title}</b> <Button handleClick={() => {toggleVisible()}} text = {buttonLabel}></Button></p>
         <p>Author: {blog.author}</p>

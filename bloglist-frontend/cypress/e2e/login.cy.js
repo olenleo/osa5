@@ -1,5 +1,3 @@
-const { func } = require("prop-types")
-
 describe('Blog app login view', function() {
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
@@ -60,10 +58,23 @@ describe('When logged in:', function() {
     cy.contains('first blog').parent().find('button').click()
     cy.contains('Likes: 0')
     cy.contains('Like').parent().find('button').click()
+	cy.wait(500)
     cy.get("#notification").contains("Liked first blog").and('have.css', 'color','rgb(0, 0, 0)')
     cy.contains('Likes: 1')
 
   })
+
+  it('Blogs are ordered by likes', function() {
+	cy.get('.bloglist').find('div.blogListingField').eq(0).should('contain', 'first blog')
+	cy.contains('second blog').parent().find('button').click()
+    cy.contains('Like').parent().find('button').click()
+	cy.wait(500)
+	cy.contains('Like').parent().find('button').click()
+	cy.wait(500)
+	cy.get('.bloglist').find('div.blogListingField').eq(0).should('contain', 'second blog')
+	cy.get('.bloglist').find('div.blogListingField').eq(1).should('contain', 'first blog')
+  })
+
  
   it('Blogs can not be deleted by other users', function() {
     cy.contains('logout').click()
@@ -76,7 +87,7 @@ describe('When logged in:', function() {
 
   })
 
-  it.only('A blog can be deleted', function() {
+  it('A blog can be deleted', function() {
     cy.contains('first blog').parent().find('button').click()
     cy.contains('Remove').click()
     cy.get("#notification").contains("first blog deleted").and('have.css', 'color','rgb(0, 0, 0)') 
