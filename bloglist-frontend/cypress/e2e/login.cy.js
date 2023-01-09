@@ -65,18 +65,18 @@ describe('When logged in:', function() {
 
   })
  
-  it.only('Blogs can not be deleted by other users', function() {
+  it('Blogs can not be deleted by other users', function() {
     cy.contains('logout').click()
     cy.login({username: 'Test-user', name: 'null', password: 'null'})
     cy.contains('first blog').parent().find('button').click()
     cy.contains('Remove').click()
+	cy.get("#notification").contains('first blog already removed from server?').and('have.css', 'color','rgb(255, 0, 0)')
     cy.wait(500)
     cy.contains('first blog')
 
   })
 
-  it('A blog can be deleted', function() {
-    cy.wait(500)
+  it.only('A blog can be deleted', function() {
     cy.contains('first blog').parent().find('button').click()
     cy.contains('Remove').click()
     cy.get("#notification").contains("first blog deleted").and('have.css', 'color','rgb(0, 0, 0)') 

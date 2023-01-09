@@ -51,6 +51,7 @@ const App = () => {
         'token', JSON.stringify(loggedUser.token)
       )
       setUser(window.localStorage.getItem('loggedInUser'))
+	  setUsername(JSON.stringify(loggedUser.username))
      
     } catch (exception) {
       setNotification('wrong credentials')
@@ -100,10 +101,12 @@ const App = () => {
     console.log('User ', user, ' asks to delete ' , blog)
     if (window.confirm(`Remove '${blog.title}' by ${blog.author}?`)) {
       try {
-        blogService.removeItem(blog.id)
+        await blogService.removeItem(blog.id)
+		setNotification(`${blog.title} deleted`)
+		setNotificationType('success')
         setBlogs(blogs.filter(b => id !== b.id))
       } catch (e) {
-        console.log(e)
+        console.log('---->', e)
         setNotification(`${blog.title} already removed from server?`)
         setNotificationType('error')
       }

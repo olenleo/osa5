@@ -37,16 +37,20 @@ router.delete('/:id', async (request, response) => {
   if (!blogToDelete ) {
     return response.status(204).end()
   } 
-  if (request.user.id.toString() !== blogToDelete.user.toString()) {
-    console.log('User !== blog owner:')
-    console.log(request.user.id.toString(), " - ", blogToDelete.user.toString(), request.user.id.toString()=== blogToDelete.user.toString())
-    console.log('No match. Returning error.')
-    return response.status(401).json({error: 'only the creator can delete a blog'}).end()
-  }
-  blogToDelete.remove()
-  response.status(204).send()
-  console.log('Delete done.')
-})
+  console.log('Request to delete:')
+  //console.log('User:', request.user)
+  //console.log('Blog to delete:', blogToDelete)
+  	if (request.user.id.toString() !== blogToDelete.user.toString()) {
+		console.log('User !== blog owner:')
+		console.log(request.user.id.toString(), " - ", blogToDelete.user.toString(), request.user.id.toString()=== blogToDelete.user.toString())
+		console.log('No match. Returning error.')
+		return response.status(401).json({error: 'only the creator can delete a blog'}).end()
+  	} else {
+		response.json(blogToDelete)
+		blogToDelete.remove()
+	}		
+}
+)
 
 router.put('/:id', async (request, response) => {
   
